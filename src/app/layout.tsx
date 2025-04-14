@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import "bootstrap/dist/css/bootstrap.min.css"; // ✅ Import Bootstrap CSS
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,9 +25,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        {/* ✅ Add Bootstrap JS for dropdowns/togglers */}
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ENjdO4Dr2bkBIFxQpeoY9ZZd6RMfCkQeQkZpFUdU1zUaeqvj1Zq0kT8NQ58Hg1qX"
+          crossOrigin="anonymous"
+          defer
+        ></script>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>
