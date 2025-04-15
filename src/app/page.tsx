@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import Navbar from '../../components/pagesections/navbar/page';
 import Heropage from "../../components/pagesections/heropage/page";
 import Footer from "../../components/pagesections/footer/page";
-// import QRInterface from "../components/QRInterface/QR-Interface";
-// import MainTutorialSection from "../components/TutorialSections/MainTutorialSection";
+import QRInterface from "../../components/QRInterface/QRInterface";
+import MainTutorialSection from "../../components/tutorialsections/MainTutorialSection";
 
 // Static metadata (better for SEO)
 export const metadata: Metadata = {
@@ -38,8 +38,8 @@ export default function Homepage() {
 
       <main>
         <Heropage />
-        {/* <QRInterface /> */}
-        {/* <MainTutorialSection /> */}
+        <QRInterface />
+        <MainTutorialSection />
       </main>
 
       <footer>

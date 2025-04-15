@@ -69,10 +69,10 @@ const ScrollCategoryOption = ({ onCategorySelect }: ScrollCategoryOptionProps) =
 
   return (
     <div
-      className="bg-white p-2 shadow-lg text-white qr-interface-item"
+      className="bg-yellow-400 p-2 shadow-lg text-black qr-interface-item"
       style={{ backgroundColor: "#fff" }} // Fixed color value
     >
-      <div className="scroller snaps-inline">
+      <div className="flex gap-4 text-center overflow-x-auto py-2 px-1">
         {items.map((item, index) => (
           <div
             key={index}

@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import '../QRInterface/QR-Interface.css';
+import '../QRInterface/QRInterface.module.css';
 
 // Define types for the component
 interface FormInfo {
@@ -99,8 +99,8 @@ const LinkForm = ({ linkContent }: LinkFormProps) => {
           type="text"
           name="url" 
           placeholder="https://example.com" 
-          pattern="https://.*" 
-          size="30"
+          pattern="https://.*"
+          size="small"
           value={formInfo.url}
           onChange={handleChange}
           required

@@ -79,7 +79,7 @@ const WhatsAppForm = ({ linkContent }: WhatsAppFormProps) => {
           {whatsAppData.showIcon && (
             <Box 
               component="img" 
-              src={WhatsAppImage} 
+              src="/path/to/whatsapp-logo.jpg" 
               alt="WhatsApp Icon" 
               width={30} 
               height={30} 

@@ -1,8 +1,7 @@
-'use client'; // Required for client-side interactivity in Next.js
+'use client'; // Required for client-side interactivity
 
 import { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
-import Image from 'next/image';
 import QRFrame from "./QRFrame";
 import { 
     generateVCard, 
@@ -11,16 +10,34 @@ import {
     generateWhatsAppLink, 
     generatePDF,
     generateImage 
-} from './basicFunctions';
+} from './utils/basicFunctions';
 
-// Define types for all possible content properties
+// Import images using Next.js static imports
+import IconImage from '../../public/images/freecall-logo.webp';
+import EmailImage from '../../public/images/email.png';
+import WhatsAppImage from '../../public/images/whatsapp-logo.jpg';
+
+interface DotOptions {
+  type?: string;
+  color?: string;
+}
+
+interface CornerOptions {
+  type?: string;
+  color?: string;
+}
+
 interface QRContent {
     phoneNumber?: string;
     waPhoneNumber?: string;
-    waMessage?: string;
     smsMessage?: string;
+    waMessage?: string;
     showIcon?: boolean;
     firstName?: string;
+    pdfTitle?: string;
+    pdfAuthor?: string;
+    pdfMessage?: string;
+    pdfImage?: string;
     lastName?: string;
     url?: string;
     description?: string;
@@ -34,62 +51,37 @@ interface QRContent {
     imageUrl?: string;
     pdfContent?: string;
     imageContent?: string;
-    // PDF specific fields (if needed)
-    pdfTitle?: string;
-    pdfAuthor?: string;
-    pdfMessage?: string;
-    pdfImage?: string;
 }
 
 interface QRStyle {
-    dotsOptions: {
-        type: string;
-        color: string;
-    };
-    cornersSquareOptions: {
-        type: string;
-        color: string;
-    };
-    cornersDotOptions: {
-        type: string;
-        color: string;
-    };
+    dotsOptions: DotOptions;
+    cornersSquareOptions: CornerOptions;
+    cornersDotOptions: CornerOptions;
 }
 
 interface QROutputInterfaceProps {
     content: QRContent;
     qrStyle: QRStyle;
-    onStyleChange: (newStyle: QRStyle) => void;
+    onStyleChange: (style: QRStyle) => void;
 }
 
 const QROutputInterface = ({ content, qrStyle, onStyleChange }: QROutputInterfaceProps) => {
     const qrCodeRef = useRef<HTMLDivElement>(null);
     const [selectedFormat, setSelectedFormat] = useState<"png" | "svg" | "jpeg">("png");
-
-    // Initialize QR code with proper typing
-    const qrCode = useRef<QRCodeStyling>(
-        new QRCodeStyling({
-            width: 200,
-            height: 200,
-            type: "svg",
-            margin: 0,
-            qrOptions: {
-                typeNumber: 0,
-                mode: "Byte",
-                errorCorrectionLevel: "H",
-            },
-            dotsOptions: qrStyle.dotsOptions,
-            cornersSquareOptions: qrStyle.cornersSquareOptions,
-            cornersDotOptions: qrStyle.cornersDotOptions,
-        })
-    ).current;
-
-    // Mount QR code to DOM
-    useEffect(() => {
-        if (qrCodeRef.current) {
-            qrCode.append(qrCodeRef.current);
-        }
-    }, [qrCode]);
+    const [qrCode] = useState<QRCodeStyling>(new QRCodeStyling({
+        width: 200,
+        height: 200,
+        type: "svg",
+        margin: 0,
+        qrOptions: {
+            typeNumber: 0,
+            mode: "Byte",
+            errorCorrectionLevel: "H",
+        },
+        dotsOptions: qrStyle.dotsOptions ?? {},
+        cornersSquareOptions: qrStyle.cornersSquareOptions ?? {},
+        cornersDotOptions: qrStyle.cornersDotOptions ?? {},
+    }));
 
     // Update QR code based on content
     const updateQRCode = () => {
@@ -98,17 +90,17 @@ const QROutputInterface = ({ content, qrStyle, onStyleChange }: QROutputInterfac
 
         if (content.waPhoneNumber && content.waMessage) {
             qrData = generateWhatsAppLink(content);
-            qrImage = content.showIcon ? "/images/whatsapp-logo.jpg" : "";
+            qrImage = content.showIcon ? WhatsAppImage.src : "";
         } else if (content.smsMessage) {
             qrData = generateSmsData(content);
         } else if (content.phoneNumber) {
             qrData = `tel:${content.phoneNumber}`;
-            qrImage = content.showIcon ? "/images/freecall-logo.webp" : "";
+            qrImage = content.showIcon ? IconImage.src : "";
         } else if (content.firstName && content.lastName) {
             qrData = generateVCard(content);
         } else if (content.receiverEmail) {
             qrData = generateEmailData(content);
-            qrImage = content.showIcon ? "/images/email.png" : "";
+            qrImage = content.showIcon ? EmailImage.src : "";
         } else if (content.pdfContent) {
             qrData = generatePDF(content);
         } else if (content.imageContent) {
@@ -120,17 +112,22 @@ const QROutputInterface = ({ content, qrStyle, onStyleChange }: QROutputInterfac
         qrCode.update({
             data: qrData,
             image: qrImage || content.imageUrl || "",
-            dotsOptions: qrStyle.dotsOptions,
-            cornersSquareOptions: qrStyle.cornersSquareOptions,
-            cornersDotOptions: qrStyle.cornersDotOptions,
+            dotsOptions: qrStyle.dotsOptions ?? {},
+            cornersSquareOptions: qrStyle.cornersSquareOptions ?? {},
+            cornersDotOptions: qrStyle.cornersDotOptions ?? {},
         });
     };
+
+    useEffect(() => {
+        if (qrCodeRef.current) {
+            qrCode.append(qrCodeRef.current);
+        }
+    }, [qrCode]);
 
     useEffect(() => {
         updateQRCode();
     }, [content, qrStyle]);
 
-    // Handle QR code download
     const handleDownload = (format: "png" | "svg" | "jpeg") => {
         updateQRCode();
         setTimeout(() => {
@@ -138,21 +135,23 @@ const QROutputInterface = ({ content, qrStyle, onStyleChange }: QROutputInterfac
         }, 100);
     };
 
+    const handleStyleChange = (newStyle: QRStyle) => {
+        onStyleChange(newStyle);
+    };
+
     return (
         <div className="bg-white shadow-lg qr-interface-item p-3 outputHere">
-            <p>
+            <p className="text-center text-black">
                 Want to do more? <a href="#">Click Here</a>
             </p>
-            <div className="qrContainer">
+            <div className=" text-center w-full p-3 qrContainer">
                 <div ref={qrCodeRef} />
             </div>
 
-            {/* QRFrame Component to select styles */}
             <div>
-                <QRFrame className="qr" qrCompStyle={onStyleChange} />
+                <QRFrame qrCompStyle={handleStyleChange} />
             </div>
 
-            {/* Download Buttons */}
             <div className="takeAction d-flex">
                 <button
                     className="btn btn-secondary rounded-0 ms-2"

@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
-import { uploadPDFAndGetURL } from '../../firebase'; // Adjust path as necessary
-import { auth, User } from '../../firebase'; // Ensure you import your auth configuration
+import { uploadFileAndGetURL } from '@/firebase'; // Adjust path as necessary
+import { auth } from '@/firebase'; // Ensure you import your auth configuration
+import { User } from 'firebase/auth'; // Import the User type from Firebase Authentication
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -8,7 +9,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
-import '../QRInterface/QR-Interface.css';
+import '../QRInterface/QRInterface.module.css';
 
 // Define types for the component
 interface FormInfo {
@@ -80,7 +81,7 @@ const PDFForm = ({ linkContent }: PDFFormProps) => {
 
     if (file) {
       try {
-        const downloadURL = await uploadPDFAndGetURL(file);
+        const downloadURL = await uploadFileAndGetURL(file, `uploads/${file.name}`);
         const updatedInfo = { ...formInfo, pdfContent: downloadURL };
         setFormInfo(updatedInfo);
         linkContent(updatedInfo);

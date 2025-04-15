@@ -1,15 +1,15 @@
 'use client'; // Required for client-side interactivity in Next.js
 
 import { useState } from "react";
-import FrameOne from "../FrameStructure/FrameOne";
-import FrameTwo from "../FrameStructure/FrameTwo";
-import FrameThree from "../FrameStructure/FrameThree";
-import FrameFour from "../FrameStructure/FrameFour";
-import Framefive from "../FrameStructure/Framefive";
-import FrameSix from "../FrameStructure/FrameSix";
-import FrameSeven from "../FrameStructure/FrameSeven";
-import FrameEight from "../FrameStructure/FrameEight";
-import FrameNine from "../FrameStructure/FrameNine";
+import FrameOne from "../framestructure/FrameOne"
+import FrameTwo from "../framestructure/FrameTwo";
+import FrameThree from "../framestructure/FrameThree";
+import FrameFour from "../framestructure/FrameFour";
+import Framefive from "../framestructure/FrameFive";
+import FrameSix from "../framestructure/FrameSix";
+import FrameSeven from "../framestructure/FrameSeven";
+import FrameEight from "../framestructure/FrameEight";
+import FrameNine from "../framestructure/FrameNine";
 import styles from '../QRInterface/QRInterface.module.css'; // Converted to CSS Modules
 
 interface FrameItem {
